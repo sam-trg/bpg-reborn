@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boarding Pass - SkyWay Airlines</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://html2canvas.github.io/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              sky: {
+                50: "#f0f9ff",
+                100: "#e0f2fe",
+                500: "#0ea5e9",
+                600: "#0284c7",
+                700: "#0369a1",
+              },
+              navy: {
+                800: "#1e3a8a",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .seat {
+        width: 40px;
+        height: 40px;
+        margin: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .seat-available {
+        background-color: #e0f2fe;
+        border: 1px solid #0ea5e9;
+        color: #0369a1;
+      }
+      .seat-selected {
+        background-color: #0ea5e9;
+        border: 1px solid #0284c7;
+        color: white;
+      }
+      .seat-booked {
+        background-color: #f3f4f6;
+        border: 1px solid #d1d5db;
+        color: #9ca3af;
+        cursor: not-allowed;
+      }
+      .seat-premium {
+        background-color: #fef3c7;
+        border: 1px solid #f59e0b;
+        color: #b45309;
+      }
+      .aisle {
+        width: 20px;
+      }
+      @media print {
+        .no-print {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm no-print">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <a href="/" class="flex-shrink-0 flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-sky-600"
+                fill="none"
+                viewbox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              <span class="ml-2 text-xl font-bold text-gray-900"
+                >SkyWay Airlines</span
+              >
+            </a>
+          </div>
+          <div class="hidden md:flex items-center space-x-4">
+            <a
+              href="/"
+              class="text-gray-700 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium"
+              >Home</a
+            >
+            <a
+              href="details.html"
+              class="text-gray-700 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium"
+              >Manage Booking</a
+            >
+            <a
+              href="#"
+              class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+              >Download Boarding Pass</a
+            >
+          </div>
+          <div class="flex md:hidden items-center">
+            <button
+              type="button"
+              class="text-gray-700 hover:text-sky-600"
+              id="mobile-menu-button"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewbox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-xl mx-auto py-8 px-4 sm:px-6 lg:px-8 pt-18">
+      <div class="grid grid-cols-1 lg:grid-cols- gap-8">
+        <!-- Right column: Boarding pass form and preview -->
+        <div>
+          <!-- Boarding pass preview -->
+          <div
+            id="boarding-pass"
+            class="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+          >
+            <div class="flex justify-between items-start mb-6">
+              <div class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-10 w-10 text-sky-600"
+                  fill="none"
+                  viewbox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <div class="ml-2">
+                  <h3 class="text-xl font-bold text-gray-900">
+                    SkyWay Airlines
+                  </h3>
+                  <p class="text-sm text-gray-500">
+                    Your journey, our priority
+                  </p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-500">Boarding Pass</p>
+                <p class="text-lg font-bold text-sky-600" id="bp-flight-number">
+                  PNR {{pnr}}
+                </p>
+              </div>
+            </div>
+
+            <div class="border-t border-b border-dashed border-gray-300 py-4 mb-4">
+              <div class="grid grid-cols-3 gap-4">
+
+                
+                <div>
+                  <p class="text-sm text-gray-500">Flight Number</p>
+                  <p class="text-lg font-bold text-sky-600" id="flight-number">
+                    {{flight}}
+                  </p>
+                </div>
+                
+                <div>
+                  <p class="text-sm text-gray-500">Seat</p>
+                  <p class="text-lg font-bold text-gray-900" id="bp-seat-number">
+                    {{seat}}
+                  </p>
+                </div>
+                
+
+                
+                
+                
+                <div>
+                  <p class="text-sm text-gray-500">Passenger</p>
+                  <p class="text-lg font-bold text-gray-900" id="bp-passenger-name">
+                    {{name}}
+                  </p>
+                </div>
+                
+                
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mb-6">
+              <div>
+                <p class="text-sm text-gray-500">From</p>
+                <p class="font-medium">{{from}}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">To</p>
+                <p class="font-medium">{{to}}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Date</p>
+                <p class="font-medium" id="bp-flight-date">{{date}}</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mb-6">
+              <div>
+                <p class="text-sm text-gray-500">Gate</p>
+                <p class="font-medium" id="bp-gate-number">{{gate}}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Boarding</p>
+                <p class="font-medium" id="bp-boarding-time">{{boarding}}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Departure</p>
+                <p class="font-medium">{{departure}}</p>
+              </div>
+            </div>
+
+            <div class="flex justify-center mb-4">
+              <div class="bg-gray-100 p-4 rounded-lg w-full text-center">
+                <p class="text-sm text-gray-500 mb-2">Scan QR Code at Gate</p>
+                <img
+                  id="bp-qr"
+                  src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Flight-{{flight}}-{{from_city}}-{{to-city}}%0APNR-{{pnr}}%0A{{name}}%0ASeat-{{seat}}%0AGate-{{gate}}"
+                  alt="QR Code"
+                  class="mx-auto h-32 w-32"
+                />
+              </div>
+            </div>
+
+            <div class="text-center text-sm text-gray-500">
+              <p>
+                Please arrive at the gate at least 30 minutes before boarding
+                time.
+              </p>
+              <p>Valid ID is required for all passengers.</p>
+            </div>
+          </div>
+
+          <div class="mt-6 flex justify-center space-x-4 no-print">
+            <button
+              id="download-pass"
+              class="bg-sky-600 hover:bg-sky-700 text-white py-2 px-4 rounded-md flex items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-2"
+                fill="none"
+                viewbox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                />
+              </svg>
+              Download Boarding Pass
+            </button>
+
+            <button
+              id="print-pass"
+              class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-md flex items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-2"
+                fill="none"
+                viewbox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                />
+              </svg>
+              Print Boarding Pass
+            </button>
+          </div>
+
+          <div class="mt-6 text-center no-print">
+            <a
+              href="/"
+              class="inline-block bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-md"
+            >
+              Back to Home
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      // Download boarding pass
+      document
+        .getElementById("download-pass")
+        .addEventListener("click", function () {
+          const boardingPass = document.getElementById("boarding-pass");
+          const qrImage = boardingPass.querySelector("img");
+
+          // Ensure the QR image is fully loaded
+          if (!qrImage.complete) {
+            qrImage.onload = () => captureAndDownload(boardingPass);
+          } else {
+            captureAndDownload(boardingPass);
+          }
+        });
+
+      function captureAndDownload(element) {
+        html2canvas(element).then((canvas) => {
+          canvas.toBlob(function (blob) {
+            saveAs(blob, "boarding-pass.png");
+          });
+        });
+      }
+
+      // Print boarding pass
+      document
+        .getElementById("print-pass")
+        .addEventListener("click", function () {
+          window.print();
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  </body>
+</html>

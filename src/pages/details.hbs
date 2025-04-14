@@ -32,35 +32,25 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="index.html" class="flex-shrink-0 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <a href="/" class="flex-shrink-0 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-600" fill="none" viewxox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
                         <span class="ml-2 text-xl font-bold text-gray-900">SkyWay Airlines</span>
                     </a>
                 </div>
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="index.html" class="text-gray-700 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="/" class="text-gray-700 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
                     <a href="" class="text-gray-700 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">Manage Booking</a>
-                    <a href="index.html" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md text-sm font-medium">Download Boarding Pass</a>
+                    <a href="/" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md text-sm font-medium">Download Boarding Pass</a>
                 </div>
                 <div class="flex md:hidden items-center">
                     <button type="button" class="text-gray-700 hover:text-sky-600" id="mobile-menu-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewbox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
                 </div>
-            </div>
-        </div>
-        <!-- Mobile menu, show/hide based on menu state -->
-        <div class="md:hidden hidden" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#" class="text-gray-700 hover:text-sky-600 block px-3 py-2 rounded-md text-base font-medium">Flights</a>
-                <a href="#" class="text-gray-700 hover:text-sky-600 block px-3 py-2 rounded-md text-base font-medium">Hotels</a>
-                <a href="#" class="text-gray-700 hover:text-sky-600 block px-3 py-2 rounded-md text-base font-medium">Packages</a>
-                <a href="#" class="text-gray-700 hover:text-sky-600 block px-3 py-2 rounded-md text-base font-medium">Manage Booking</a>
-                <a href="#" class="bg-sky-600 hover:bg-sky-700 text-white block px-3 py-2 rounded-md text-base font-medium">Sign In</a>
             </div>
         </div>
     </nav>
@@ -99,7 +89,8 @@
             </div>
         </div>
     </div> -->
-
+<form action="/details-submit" method="POST">
+  
     <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 pt-24">
         <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">Passenger Details</h1>
 
@@ -109,7 +100,7 @@
                 <div class="passenger-form bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
                     <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 rounded-t-lg">
                         <h2 class="text-lg font-medium flex justify-between items-center">
-                            <span>Passenger 1</span>
+                            <span>Passenger Details</span>
                             <button type="button" class="remove-passenger text-red-500 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded hidden">
                                 Remove
                             </button>
@@ -119,7 +110,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="title-1" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                                <select id="title-1" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                <select name="title" id="title-1" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500">
                                     <option value="Mr">Mr</option>
                                     <option value="Mrs">Mrs</option>
                                     <option value="Ms">Ms</option>
@@ -130,11 +121,11 @@
                             <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label for="firstName-1" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                                    <input id="firstName-1" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="As per government ID">
+                                    <input name="first_name" id="firstName-1" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="As per government ID">
                                 </div>
                                 <div>
                                     <label for="lastName-1" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                                    <input id="lastName-1" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="As per government ID">
+                                    <input name="last_name" id="lastName-1" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="As per government ID">
                                 </div>
                             </div>
 
@@ -157,9 +148,9 @@
             </div>
 
             <!-- Add passenger button -->
-            <button id="add-passenger" class="w-full py-6 border-dashed border-2 border-gray-300 text-gray-500 hover:text-gray-700 hover:border-gray-400 rounded-lg bg-white">
+<!--             <button id="add-passenger" class="w-full py-6 border-dashed border-2 border-gray-300 text-gray-500 hover:text-gray-700 hover:border-gray-400 rounded-lg bg-white">
                 + Add Another Passenger
-            </button>
+            </button> -->
 
             <!-- Contact Information -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -221,20 +212,18 @@
                         <p class="text-sm text-gray-500">Total Amount</p>
                         <p class="text-2xl font-bold text-gray-900" id="total-amount">₹4,999</p>
                     </div>
-                    <a href="seat-selection.html" class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white text-lg py-3 px-8 rounded-lg">
-                        Select Seat & Get Boarding Pass
-                    </a>
+                  <button type="submit" class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white text-lg py-3 px-8 rounded-lg">
+                    Select Seat &amp Get Boarding Pass
+                  </button>
+<!--                     <a href="/seat-selection" class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white text-lg py-3 px-8 rounded-lg">
+                        Select Seat &amp Get Boarding Pass
+                    </a> -->
                 </div>
             </div>
         </div>
     </div>
-
+</form>
     <script>
-        // Mobile menu toggle
-        document.getElementById('mobile-menu-button').addEventListener('click', function() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        });
 
         // Add passenger functionality
         const addPassengerBtn = document.getElementById('add-passenger');

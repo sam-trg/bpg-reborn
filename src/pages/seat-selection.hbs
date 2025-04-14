@@ -75,21 +75,21 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="index.html" class="flex-shrink-0 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <a href="/" class="flex-shrink-0 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-600" fill="none" viewbox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
                         <span class="ml-2 text-xl font-bold text-gray-900">SkyWay Airlines</span>
                     </a>
                 </div>
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="index.html" class="text-gray-700 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                    <a href="details.html" class="text-gray-700 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">Manage Booking</a>
+                    <a href="/" class="text-gray-700 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="/details" class="text-gray-700 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">Manage Booking</a>
                     <a href="#" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md text-sm font-medium">Download Boarding Pass</a>
                 </div>
                 <div class="flex md:hidden items-center">
                     <button type="button" class="text-gray-700 hover:text-sky-600" id="mobile-menu-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewbox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
@@ -139,7 +139,7 @@
                         <div class="flex justify-center mb-8">
                             <div class="w-full max-w-md bg-gray-100 p-4 rounded-lg">
                                 <div class="flex justify-center mb-6">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-500" fill="none" viewbox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                     </svg>
                                 </div>
@@ -270,6 +270,10 @@
             </div>
             
             <!-- Right column: Boarding pass form and preview -->
+          <form action="/generate-boarding-pass" method="POST">
+              <input type="hidden" name="title" value="{{title}}">
+              <input type="hidden" name="first_name" value="{{first_name}}">
+              <input type="hidden" name="last_name" value="{{last_name}}">
             <div>
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6 no-print">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">Flight Information</h2>
@@ -277,46 +281,94 @@
                     <div class="space-y-4">
                         
                         <div>
-                            <label for="flight-number" class="block text-sm font-medium text-gray-700 mb-1">Flight Number</label>
-                            <input id="flight-number" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" value="SW-123" readonly>
+                            <label for="flight_number" class="block text-sm font-medium text-gray-700 mb-1">Flight Number</label>
+                            <input name="flight_number" id="flight_number" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" value="XR-184" readonly>
                         </div>
                         
-                        <div class="grid grid-cols-2 gap-4">
+<div class="grid grid-cols-2 gap-4">
+  <div>
+    <label for="from_city" class="block text-sm font-medium text-gray-700 mb-1">From</label>
+    <select name="from_city" id="from_city" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500">
+      <option value="DEL">Delhi (DEL)</option>
+      <option value="BOM">Mumbai (BOM)</option>
+      <option value="BLR">Bangalore (BLR)</option>
+      <option value="HYD">Hyderabad (HYD)</option>
+      <option value="MAA">Chennai (MAA)</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="to_city" class="block text-sm font-medium text-gray-700 mb-1">To</label>
+    <select name="to_city" id="to_city" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500">
+      <option value="BOM">Mumbai (BOM)</option>
+      <option value="DEL">Delhi (DEL)</option>
+      <option value="BLR">Bangalore (BLR)</option>
+      <option value="HYD">Hyderabad (HYD)</option>
+      <option value="MAA">Chennai (MAA)</option>
+    </select>
+  </div>
+</div>
+  <script>
+
+
+      function updateDisabledOptions(source, target) {
+        const selected = source.value;
+        Array.from(target.options).forEach(opt => {
+          opt.disabled = opt.value === selected;
+        });
+      }
+      
+      const fromSelect= document.getElementById('from_city');
+      const toSelect = document.getElementById('to_city');
+      
+      fromSelect.addEventListener('change', () => updateDisabledOptions(fromSelect, toSelect));
+      toSelect.addEventListener('change', () => updateDisabledOptions(toSelect, fromSelect));
+
+      // Initialize on load
+      updateDisabledOptions(fromSelect, toSelect);
+
+
+  </script>
+
+                      
+                      <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label for="flight-date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                                <input id="flight-date" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" value="2025-05-15">
+                                <input name="flight_date" id="flight-date" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" value="2025-05-15">
                             </div>
                             
                             <div>
-                                <label for="boarding-time" class="block text-sm font-medium text-gray-700 mb-1">Boarding Time</label>
-                                <input id="boarding-time" type="time" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" value="06:00">
+                                <label for="boarding-time" class="block text-sm font-medium text-gray-700 mb-1">Flight Time</label>
+                                <input name="boarding_time" id="boarding-time" type="time" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" value="06:00">
                             </div>
                         </div>
                         
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label for="gate-number" class="block text-sm font-medium text-gray-700 mb-1">Gate</label>
-                                <input id="gate-number" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" value="A12">
+                                <label  for="gate" class="block text-sm font-medium text-gray-700 mb-1">Gate</label>
+                                <input name="gate" id="gate" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" value="E3">
                             </div>
                             
                             <div>
                                 <label for="seat-number" class="block text-sm font-medium text-gray-700 mb-1">Seat</label>
-                                <input id="seat-number" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" readonly placeholder="Select a seat">
+                                <input name="seat" id="seat-number" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" readonly placeholder="Select a seat">
                             </div>
                         </div>
                     </div>
                     
                     <div class="mt-6">
-                        <button id="generate-pass" onclick="window.location.href='boarding-pass.html'" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-3 px-4 rounded-md">Generate Boarding Pass</button>
+                        <button type="submit" id="generate-pass" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-3 px-4 rounded-md">Generate Boarding Pass</button>
                     </div>
                 </div>
-                
+               
     
             </div>
+            </form> 
         </div>
     </div>
 
-    <script>
+<script>
+      
         // Mobile menu toggle
         document.getElementById('mobile-menu-button').addEventListener('click', function() {
             const menu = document.getElementById('mobile-menu');
@@ -364,38 +416,213 @@
             const flightNumber = document.getElementById('flight-number').value;
             const flightDate = document.getElementById('flight-date').value;
             const boardingTime = document.getElementById('boarding-time').value;
-            const gateNumber = document.getElementById('gate-number').value;
+            const gate = document.getElementById('gate').value;
+            const to_city = document.getElementById('to_city').value;
+            const from_city = document.getElementById('from_city').value;
             
             // Format date
             const date = new Date(flightDate);
             const formattedDate = date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
             
-            // Update boarding pass
-            document.getElementById('bp-passenger-name').textContent = passengerName;
-            document.getElementById('bp-flight-number').textContent = flightNumber;
-            document.getElementById('bp-flight-date').textContent = formattedDate;
-            document.getElementById('bp-boarding-time').textContent = boardingTime;
-            document.getElementById('bp-gate-number').textContent = gateNumber;
+            // // Update boarding pass
+            // document.getElementById('bp-passenger-name').textContent = passengerName;
+            // document.getElementById('bp-flight-number').textContent = flightNumber;
+            // document.getElementById('bp-flight-date').textContent = formattedDate;
+            // document.getElementById('bp-boarding-time').textContent = boardingTime;
+            // document.getElementById('bp-gate-number').textContent = gate;
             
             // Scroll to boarding pass
             document.getElementById('boarding-pass').scrollIntoView({ behavior: 'smooth' });
         });
 
-        // Download boarding pass
-        document.getElementById('download-pass').addEventListener('click', function() {
-            const boardingPass = document.getElementById('boarding-pass');
+      
+          const routeMap = {
+      "BOM-DEL": {
+         gate: "S1",
+        flightNumber: "LW-312",
+        date: "15/05/2025",
+        time: "06:00 AM"
+      },
+      
+      "BOM-BLR": {
+        gate: "B5",
+        flightNumber: "AP-692",
+        date: "15/05/2025",
+        time: "07:00 AM"
+        
+      },
             
-            html2canvas(boardingPass).then(canvas => {
-                canvas.toBlob(function(blob) {
-                    saveAs(blob, 'boarding-pass.png');
-                });
-            });
-        });
+      "BOM-HYD": {
+        gate: "C29",
+        flightNumber: "MV-455",
+        date: "15/05/2025",
+        time: "08:00 AM"
+        
+      },
+            
+      "BOM-MAA": {
+        gate: "D10",
+        flightNumber: "DN-729",
+        date: "15/05/2025",
+        time: "09:00 AM"
+        
+      },
+            
+      "DEL-BOM": {
+        gate: "E3",
+        flightNumber: "XR-184",
+        date: "15/05/2025",
+        time: "10:00 AM"
+        
+      },
+      
+      "DEL-BLR": {
+        gate: "F5",
+        flightNumber: "KG-221",
+        date: "15/05/2025",
+        time: "11:00 AM"
+        
+      },
+            
+      "DEL-HYD": {
+        gate: "G12",
+        flightNumber: "CN-898",
+        date: "15/05/2025",
+        time: "12:00 PM"
+        
+      },
+            
+      "DEL-MAA": {
+        gate: "H15",
+        flightNumber: "UC-211",
+        date: "15/05/2025",
+        time: "01:00 PM"
+        
+      },
+            
+      "BLR-BOM": {
+        gate: "I9",
+        flightNumber: "WO-814",
+        date: "15/05/2025",
+        time: "02:00 PM"
+        
+      },
+        "BLR-DEL": {
+        gate: "J2",
+        flightNumber: "SP-555",
+        date: "15/05/2025",
+        time: "03:00 PM",
+        
+      },
+            
+            "BLR-HYD": {
+              gate: "K19",
+        flightNumber: "LW-934",
+        date: "15/05/2025",
+        time: "04:00 PM"
+        
+      },
+            
+            "BLR-MAA": {
+            gate: "L1",
+        flightNumber: "PC-317",
+        date: "15/05/2025",
+        time: "05:00 PM"
+        
+      },
+            
+            "HYD-BOM": {
+              gate: "M2",
+        flightNumber: "AC-599",
+        date: "15/05/2025",
+        time: "06:00 PM"
+        
+      },
+            
+            "HYD-DEL": {
+              gate: "N3",
+        flightNumber: "IG-710",
+        date: "15/05/2025",
+        time: "07:00 PM"
+        
+      },
+          "HYD-BLR": {
+            gate: "O21",
+        flightNumber: "ZM-362",
+        date: "15/05/2025",
+        time: "08:00 PM"
+        
+      },
+        "HYD-MAA": {
+          gate: "P13",
+        flightNumber: "CK-464",
+        date: "15/05/2025",
+        time: "09:00 PM"
+        
+      },
+        "MAA-BOM": {
+          gate: "Q7",
+        flightNumber: "VB-678",
+        date: "15/05/2025",
+        time: "10:00 PM"
+        
+      },
+        "MAA-DEL": {
+          gate: "R1",
+        flightNumber: "HK-936",
+        date: "15/05/2025",
+        time: "11:00 PM"
+        
+      },
+        "MAA-BLR": {
+          gate: "S2",
+        flightNumber: "HY-798",
+        date: "15/05/2025",
+        time: "12:00 AM",
+        
+      },
+      "MAA-HYD": {
+        gate: "T19",
+        flightNumber: "RE-329",
+        date: "15/05/2025",
+        time: "01:00 AM"
+        
+      }
+ 
+    };
 
-        // Print boarding pass
-        document.getElementById('print-pass').addEventListener('click', function() {
-            window.print();
+    const from = document.getElementById("from_city");
+    const to = document.getElementById("to_city");
+    const fields = {
+      flightNumber: document.getElementById("flight_number"),
+      date: document.getElementById("flight_date"),
+      time: document.getElementById("boarding_time"),
+      gate: document.getElementById("gate"),
+      seat: document.getElementById("seat")
+    };
+
+    function updateFields() {
+      const key = `${from.value}-${to.value}`;
+      const data = routeMap[key];
+      if (data) {
+        Object.entries(data).forEach(([k, v]) => {
+          fields[k].value = v;
+          fields[k].readOnly = true;
         });
+      } else {
+        Object.values(fields).forEach(f => {
+          if (f.id !== "seat") {
+            f.value = "";
+            f.readOnly = false;
+          }
+        });
+      }
+    }
+
+    from.addEventListener("change", updateFields);
+    to.addEventListener("change", updateFields);
+    
+      
     </script>
 </body>
 </html>
