@@ -33,11 +33,7 @@ fastify.register(require("@fastify/view"), {
   },
 });
 
-// Load and parse SEO data
-const seo = require("./src/seo.json");
-if (seo.url === "glitch-default") {
-  seo.url = `https://${process.env.PROJECT_DOMAIN}.glitch.me`;
-}
+
 
 // We use a module for handling database operations in /src
 const db = require("./src/sqlite.js");
